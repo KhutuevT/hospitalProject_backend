@@ -11,25 +11,35 @@ class UserController {
   async registration(req, res, next) {
     try {
       const { login, password } = req.body;
-      const loginIsValid = login.match(/^[а-яА-Яa-zA-Z\d]{6,}$/gm);
-      const passwordIsValid = password.match(/^(?=.*\d)[a-zA-Z\d]{6,}$/gm);
-      if (!loginIsValid || !passwordIsValid) {
-        return res.status(400).json({ message: "Invalid password or login" });
-      }
-      const candidate = await User.findOne({ login });
-      if (candidate) {
-        return res
-          .status(400)
-          .json({ message: "A user with this login already exists." });
-      }
+      const body = req.body;
+      if (
+        body.hasOwnProperty("login") &&
+        login.trim().lenght !==0 &&
+        body.hasOwnProperty("password") &&
+        password.trim().lenght !==0
+      ) {
+        const candidate = await User.findOne({ login });
+        if (candidate) {
+          return res
+            .status(400)
+            .json({ message: "A user with this login already exists." });
+        }
 
-      const hashPassword = await bcrypt.hash(password, 3);
-      const user = new User({ login, password: hashPassword });
-      await user.save();
-      const token = generateAccessToken(user._id);
-      return res.json({ token });
+        const hashPassword = await bcrypt.hash(password, 3);
+        const user = new User({ login, password: hashPassword });
+        await user
+          .save()
+          .then(() => {
+            const token = generateAccessToken(user._id);
+            return res.json({ token });
+          })
+          .catch((e) => {
+            res.status(400).json({ e });
+          });
+      } else {
+        res.status(400).json({ message: "Empty fields" });
+      }
     } catch (e) {
-      console.log(e);
       res.status(400).json({ message: "Registration error" });
     }
   }
