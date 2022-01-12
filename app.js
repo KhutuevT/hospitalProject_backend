@@ -16,10 +16,6 @@ mongoose.connect(process.env.DB_URL, {
   useUnifiedTopology: true,
 });
 
-app.get("/", (req, res) => {
-  res.send("NodeJS");
-});
-
 app.listen(PORT, () => {
   console.log("listening on port", PORT);
 });
