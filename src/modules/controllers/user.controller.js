@@ -7,7 +7,6 @@ const generateAccessToken = (id) => {
   return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: "24h" });
 };
 
-
 module.exports.registration = async(req, res, next) => {
     try {
       const { login, password } = req.body;
