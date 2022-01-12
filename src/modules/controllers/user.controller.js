@@ -7,8 +7,8 @@ const generateAccessToken = (id) => {
   return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: "24h" });
 };
 
-class UserController {
-  async registration(req, res, next) {
+
+module.exports.registration = async(req, res, next) => {
     try {
       const { login, password } = req.body;
       const body = req.body;
@@ -42,7 +42,4 @@ class UserController {
     } catch (e) {
       res.status(400).json({ message: "Registration error" });
     }
-  }
 }
-
-module.exports = new UserController();
