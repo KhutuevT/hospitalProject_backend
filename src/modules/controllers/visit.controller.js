@@ -10,7 +10,7 @@ module.exports.getAllVisits = async (req, res, next) => {
         return res.status(400).send(err);
       });
   } catch {
-    res.status(400).json({ message: "Error" });
+    return res.status(400).json({ message: "Error" });
   }
 };
 
@@ -38,10 +38,10 @@ module.exports.addNewVisits = async (req, res, next) => {
           return res.status(400).send(err);
         });
     } else {
-      res.status(400).json({ message: "Empty fields" });
+      return res.status(400).json({ message: "Empty fields" });
     }
   } catch {
-    res.status(400).json({ message: "Error" });
+    return res.status(400).json({ message: "Error" });
   }
 };
 
@@ -67,10 +67,28 @@ module.exports.updateVisit = async (req, res, next) => {
             return res.status(400).send(err);
           });
       } else {
-        res.status(400).json({ message: "Empty fields" });
+        return res.status(400).json({ message: "Empty fields" });
       }
     }
   } catch (e) {
-    res.status(400).json({ message: "Error" });
+    return res.status(400).json({ message: "Error"});
+  }
+};
+
+module.exports.deleteVisit = async (req, res, next) => {
+  try {
+    if (req.query.id.trim().lenght !== 0) {
+      const id = req.query.id;
+      Visit.deleteOne({ _id: id }).then((result) => {
+        return res.send({ data: result });
+      }).catch((err) => {
+        return res.send({ message: "Error"})
+      })
+    } else {
+      return res.status(400).json({ message: "Empty ID" });
+    }
+  } catch (err) {
+    console.log(err)
+    return res.status(400).json({ message: "Error"});
   }
 };
