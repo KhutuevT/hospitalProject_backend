@@ -44,3 +44,33 @@ module.exports.addNewVisits = async (req, res, next) => {
     res.status(400).json({ message: "Error" });
   }
 };
+
+module.exports.updateVisit = async (req, res, next) => {
+  try {
+    const body = req.body;
+    if (body.hasOwnProperty("id") && body.id.trim().lenght !== 0) {
+      if (
+        body.hasOwnProperty("patient_name") &&
+        body.patient_name.trim().lenght !== 0 &&
+        body.hasOwnProperty("doc_name") &&
+        body.doc_name.trim().lenght !== 0 &&
+        body.hasOwnProperty("date") &&
+        body.date.trim().lenght !== 0 &&
+        body.hasOwnProperty("complaints") &&
+        body.complaints.trim().lenght !== 0
+      ) {
+        await Visit.updateOne({ _id: body.id }, body)
+          .then((result) => {
+            return res.send({ data: result });
+          })
+          .catch((err) => {
+            return res.status(400).send(err);
+          });
+      } else {
+        res.status(400).json({ message: "Empty fields" });
+      }
+    }
+  } catch (e) {
+    res.status(400).json({ message: "Error" });
+  }
+};
