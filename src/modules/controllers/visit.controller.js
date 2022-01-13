@@ -61,7 +61,7 @@ module.exports.updateVisit = async (req, res, next) => {
       ) {
         await Visit.updateOne({ _id: body.id }, body)
           .then((result) => {
-            return res.send(result);
+            return res.send({ data: result });
           })
           .catch((err) => {
             return res.status(400).send(err);
