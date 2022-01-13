@@ -9,8 +9,8 @@ const generateAccessToken = (id) => {
 
 module.exports.registration = async (req, res, next) => {
   try {
-    const { login, password } = req.body;
     const body = req.body;
+    const { login, password } = body;
     if (
       body.hasOwnProperty("login") &&
       login.trim().lenght !== 0 &&
@@ -20,7 +20,7 @@ module.exports.registration = async (req, res, next) => {
       const candidate = await User.findOne({ login });
       if (candidate) {
         return res
-          .status(400)
+          .status(401)
           .json({ message: "A user with this login already exists." });
       }
       const hashPassword = await bcrypt.hash(password, 3);
@@ -48,12 +48,12 @@ module.exports.authorization = async (req, res, next) => {
     const user = await User.findOne({ login });
     if (!user) {
       return res
-        .status(400)
+        .status(401)
         .json({ message: `User with login ${login} not found` });
     }
     const validPassword = bcrypt.compareSync(password, user.password);
     if (!validPassword) {
-      return res.status(400).json({ message: "Wrong password" });
+      return res.status(401).json({ message: "Wrong password" });
     }
     const token = generateAccessToken(user._id);
     return res.json({ token });
