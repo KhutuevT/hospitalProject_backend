@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllVisits } = require("../controllers/visit.controller");
+const { getAllVisits, addNewVisits } = require("../controllers/visit.controller");
 
 router.get("/getAllVisits", getAllVisits);
+router.post("/addNewVisits", addNewVisits);
 
 module.exports = router;
