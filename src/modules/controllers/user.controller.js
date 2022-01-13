@@ -49,11 +49,11 @@ module.exports.authorization = async (req, res, next) => {
     if (!user) {
       return res
         .status(401)
-        .json({ message: `User with login ${login} not found` });
+        .json({ code:302, message: `User with login ${login} not found` });
     }
     const validPassword = bcrypt.compareSync(password, user.password);
     if (!validPassword) {
-      return res.status(401).json({ message: "Wrong password" });
+      return res.status(401).json({ code:301,  message: "Wrong password" });
     }
     const token = generateAccessToken(user._id);
     return res.json({ token });
