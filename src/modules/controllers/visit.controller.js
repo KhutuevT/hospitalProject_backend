@@ -2,8 +2,8 @@ const Visit = require("../../db/models/visit_model");
 
 module.exports.getAllVisits = async (req, res, next) => {
   try {
-    const userId = req.user.id
-    await Visit.find({userId})
+    const userId = req.user.id;
+    await Visit.find({ userId })
       .then((result) => {
         return res.send({ data: result });
       })
@@ -17,7 +17,7 @@ module.exports.getAllVisits = async (req, res, next) => {
 
 module.exports.addNewVisits = async (req, res, next) => {
   try {
-    const userId = req.user.id
+    const userId = req.user.id;
     const body = req.body;
     const { patient_name, doc_name, date, complaints } = body;
     if (
@@ -30,7 +30,7 @@ module.exports.addNewVisits = async (req, res, next) => {
       body.hasOwnProperty("complaints") &&
       complaints.trim().lenght !== 0
     ) {
-      const visit = new Visit({...body, userId});
+      const visit = new Visit({ ...body, userId });
       await visit
         .save()
         .then((result) => {
@@ -42,15 +42,14 @@ module.exports.addNewVisits = async (req, res, next) => {
     } else {
       return res.status(400).json({ message: "Empty fields" });
     }
-  } catch(e) {
-    console.log(e)
+  } catch (e) {
     return res.status(400).json({ message: e });
   }
 };
 
 module.exports.updateVisit = async (req, res, next) => {
   try {
-    const userId = req.user.id
+    const userId = req.user.id;
     const body = req.body.visit;
     if (body.hasOwnProperty("id") && body.id.trim().lenght !== 0) {
       if (
@@ -68,35 +67,33 @@ module.exports.updateVisit = async (req, res, next) => {
             return res.send({ data: result });
           })
           .catch((err) => {
-            console.log("err")
             return res.status(400).send(err);
           });
       } else {
-        console.log("err")
         return res.status(400).json({ message: "Empty fields" });
       }
     }
   } catch (e) {
-    console.log(e)
-    return res.status(400).json({ message: "Error"});
+    return res.status(400).json({ message: "Error" });
   }
 };
 
 module.exports.deleteVisit = async (req, res, next) => {
   try {
-    const userId = req.user.id
+    const userId = req.user.id;
     if (req.query.id.trim().lenght !== 0) {
       const id = req.query.id;
-      Visit.deleteOne({ _id: id, userId }).then((result) => {
-        return res.send({ data: result });
-      }).catch((err) => {
-        return res.send({ message: "Error"})
-      })
+      Visit.deleteOne({ _id: id, userId })
+        .then((result) => {
+          return res.send({ data: result });
+        })
+        .catch((err) => {
+          return res.send({ message: "Error" });
+        });
     } else {
       return res.status(400).json({ message: "Empty ID" });
     }
   } catch (err) {
-    console.log(err)
-    return res.status(400).json({ message: "Error"});
+    return res.status(400).json({ message: "Error" });
   }
 };

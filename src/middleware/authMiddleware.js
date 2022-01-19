@@ -12,7 +12,6 @@ module.exports = (req, res, next) => {
     req.user = decodeData
     next()
   } catch (e) {
-    console.log(e);
     return res.status(403).json({ message: "User is not authorized" });
   }
 };
