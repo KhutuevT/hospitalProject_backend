@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const authMiddleware = require('../../middleware/authMiddleware')
 
 const {
   getAllVisits,
@@ -8,9 +9,9 @@ const {
   deleteVisit,
 } = require("../controllers/visit.controller");
 
-router.get("/getAllVisits", getAllVisits);
-router.post("/addNewVisits", addNewVisits);
-router.patch("/updateVisit", updateVisit);
-router.delete("/deleteVisit", deleteVisit);
+router.get("/getAllVisits", authMiddleware, getAllVisits);
+router.post("/addNewVisits", authMiddleware, addNewVisits);
+router.patch("/updateVisit", authMiddleware, updateVisit);
+router.delete("/deleteVisit", authMiddleware, deleteVisit);
 
 module.exports = router;
