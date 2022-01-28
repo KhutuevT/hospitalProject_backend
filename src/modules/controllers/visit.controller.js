@@ -50,8 +50,9 @@ module.exports.addNewVisits = async (req, res, next) => {
 module.exports.updateVisit = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const body = req.body.visit;
-    if (body.hasOwnProperty("id") && body.id.trim().lenght !== 0) {
+    const body = req.body;
+    // console.log(body);
+    if (body.hasOwnProperty("_id") && body._id.trim().lenght !== 0) {
       if (
         body.hasOwnProperty("patient_name") &&
         body.patient_name.trim().lenght !== 0 &&
@@ -62,7 +63,7 @@ module.exports.updateVisit = async (req, res, next) => {
         body.hasOwnProperty("complaints") &&
         body.complaints.trim().lenght !== 0
       ) {
-        await Visit.updateOne({ _id: body.id, userId }, body)
+        await Visit.updateOne({ _id: body._id, userId }, body)
           .then((result) => {
             return res.send({ data: result });
           })
@@ -74,7 +75,7 @@ module.exports.updateVisit = async (req, res, next) => {
       }
     }
   } catch (e) {
-    return res.status(400).json({ message: "Error" });
+    return res.status(400).json({ message: e });
   }
 };
 
