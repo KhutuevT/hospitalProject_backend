@@ -42,8 +42,8 @@ module.exports.addNewVisits = async (req, res, next) => {
     } else {
       return res.status(400).json({ message: "Empty fields" });
     }
-  } catch (e) {
-    return res.status(400).json({ message: e });
+  } catch {
+    return res.status(400).json({ message: "Error" });
   }
 };
 
@@ -51,7 +51,6 @@ module.exports.updateVisit = async (req, res, next) => {
   try {
     const userId = req.user.id;
     const body = req.body;
-    // console.log(body);
     if (body.hasOwnProperty("_id") && body._id.trim().lenght !== 0) {
       if (
         body.hasOwnProperty("patient_name") &&
@@ -74,8 +73,8 @@ module.exports.updateVisit = async (req, res, next) => {
         return res.status(400).json({ message: "Empty fields" });
       }
     }
-  } catch (e) {
-    return res.status(400).json({ message: e });
+  } catch {
+    return res.status(400).json({ message: "Error" });
   }
 };
 
@@ -94,7 +93,7 @@ module.exports.deleteVisit = async (req, res, next) => {
     } else {
       return res.status(400).json({ message: "Empty ID" });
     }
-  } catch (err) {
+  } catch {
     return res.status(400).json({ message: "Error" });
   }
 };
